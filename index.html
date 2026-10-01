@@ -165,6 +165,14 @@
     }
     .copyright{max-width:680px;margin:7px auto 0;color:#5f718a;font-size:.72rem;line-height:1.45}
     .copyright strong{color:#8193aa}
+    .mode-picker[hidden]{display:none}
+    .mode-picker{position:fixed;inset:0;z-index:1000;background:rgba(2,7,14,.84);display:flex;align-items:center;justify-content:center;padding:20px}
+    .mode-card{width:min(420px,100%);background:#111e31;border:2px solid #5e789c;border-radius:18px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.6);text-align:center}
+    .mode-card h2{margin:0 0 8px;font-size:1.55rem}
+    .mode-card p{margin:0 0 18px;color:#c6d5e8}
+    .mode-actions{display:grid;gap:10px}
+    .mode-actions a,.mode-actions button{display:block;width:100%;box-sizing:border-box;border:1px solid #7189a8;border-radius:10px;padding:12px;background:#243957;color:#fff;font:800 .95rem system-ui;text-decoration:none;cursor:pointer}
+    .mode-actions a:hover,.mode-actions a:focus,.mode-actions button:hover,.mode-actions button:focus{background:#315079;outline:2px solid #ffd35a;outline-offset:2px}
     @media(max-width:680px){
       main{justify-content:flex-start;padding-top:28px}
       header{margin-bottom:22px}
@@ -185,19 +193,19 @@
         <span class="level">Basic</span>
         <h2>Crack the Code</h2>
         <p>Experiment with shapes, colors, and combinations to crack the hidden code using position-by-position feedback.</p>
-        <a class="play" href="https://cd2st.github.io/CoDeTeSt2-Basic/">PLAY BASIC</a>
+        <a class="play choose-mode" data-game-url="https://cd2st.github.io/CoDeTeSt2-Basic/" href="https://cd2st.github.io/CoDeTeSt2-Basic/?mode=daily">PLAY BASIC</a>
       </article>
       <article class="game no-repeat">
         <span class="level">Advanced</span>
         <h2>No Repeats</h2>
         <p>Solve a code with no repeated shapes or colors. Feedback is grouped rather than position-by-position, creating a tougher challenge.</p>
-        <a class="play" href="https://cd2st.github.io/CoDeTeSt2-Advanced-No-Repeats/">PLAY NO REPEATS</a>
+        <a class="play choose-mode" data-game-url="https://cd2st.github.io/CoDeTeSt2-Advanced-No-Repeats/" href="https://cd2st.github.io/CoDeTeSt2-Advanced-No-Repeats/?mode=daily">PLAY NO REPEATS</a>
       </article>
       <article class="game may-repeat">
         <span class="level">Advanced</span>
         <h2>May Repeat</h2>
         <p>Solve a code that may have repeated shapes, colors, or both. Feedback is grouped rather than position-by-position, creating a tougher challenge.</p>
-        <a class="play" href="https://cd2st.github.io/CoDeTeSt2-Advanced-May-Repeat/">PLAY MAY REPEAT</a>
+        <a class="play choose-mode" data-game-url="https://cd2st.github.io/CoDeTeSt2-Advanced-May-Repeat/" href="https://cd2st.github.io/CoDeTeSt2-Advanced-May-Repeat/?mode=daily">PLAY MAY REPEAT</a>
       </article>
       <article class="game friend">
         <span class="level">Create &amp; Share</span>
@@ -223,5 +231,23 @@
       <span class="copyright"><strong>CodeTest2™ © 2026 Brian Dunbar. All rights reserved.</strong><br>The original interface, artwork, written content, and source code may not be reproduced or distributed without permission.</span>
     </footer>
   </main>
+  <div class="mode-picker" id="modePicker" role="dialog" aria-modal="true" aria-labelledby="modeTitle" hidden>
+    <div class="mode-card">
+      <h2 id="modeTitle">CHOOSE YOUR PUZZLE</h2>
+      <p>Play today’s shared challenge or continue your own random puzzle.</p>
+      <div class="mode-actions">
+        <a id="dailyChoice" href="#">DAILY PUZZLE</a>
+        <a id="randomChoice" href="#">RANDOM PUZZLE</a>
+        <button id="cancelChoice" type="button">CLOSE</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    (()=>{
+      const picker=document.getElementById('modePicker'),daily=document.getElementById('dailyChoice'),random=document.getElementById('randomChoice'),close=document.getElementById('cancelChoice');
+      document.querySelectorAll('.choose-mode').forEach(link=>link.addEventListener('click',event=>{event.preventDefault();const base=link.dataset.gameUrl;daily.href=base+'?mode=daily';random.href=base+'?mode=random';picker.hidden=false;daily.focus();}));
+      const dismiss=()=>{picker.hidden=true;};close.addEventListener('click',dismiss);picker.addEventListener('click',event=>{if(event.target===picker)dismiss();});document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!picker.hidden)dismiss();});
+    })();
+  </script>
 </body>
 </html>
